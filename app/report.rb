@@ -15,7 +15,15 @@ class Report
                 :to_f]  
 
   AIRCRAFT_KEYS = [:name,:seats_number]
-  AIRCRAFT_CONV = [:to_s,:to_f]           
+  AIRCRAFT_CONV = [:to_s,:to_f]  
+
+  GENERAL_AIRLINE_KEYS = [:name,:age]
+  GENERAL_AIRLINE_CONV = [:to_s,:to_f] 
+
+  LOYALTY_KEYS = [:name,:age,:points,:use_points,:extra_luggage]
+  LOYALTY_CONV = [:to_s,:to_f,:to_f,:downcase,:downcase] 
+
+
          
 
   attr_reader :input_file,:output_file,:extract,:errors           
@@ -37,7 +45,7 @@ class Report
     puts "Input destination file:"
     @output_file = gets.chomp
   end
-  #just a helper for test of report_spec
+
   def set_files(input = "./sample1.txt",output = './dest1.txt')
     @input_file = input
     @output_file = output
@@ -54,7 +62,10 @@ class Report
   def convert_to_hash(symbol,start_from=2,keys,conv)
     result = {}
     @extract[symbol][0].split(' ')[start_from..-1].each_with_index do |el,ix|
-      result[keys[ix]] = el.send(conv[ix])
+      converted_el = el.send(conv[ix])
+      result[keys[ix]] = (converted_el.class == TrueClass || 
+                          converted_el.class == FalseClass)? eval(converted_el) : converted_el
+    #eval has to be performed on 'false'/'true'
     end
     result
   end
