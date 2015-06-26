@@ -30,7 +30,7 @@ describe Report do
                 :to_f]  
     report.set_files("./sample1.txt")
     report.extract_data
-    expect(report.convert_to_hash(:route,2,ROUTE_KEYS,ROUTE_CONV)).to eq({:origin=>"London",
+    expect(report.convert_to_hash(:route,0,2,ROUTE_KEYS,ROUTE_CONV)).to eq({:origin=>"London",
                                                                           :destination=>"Dublin",
                                                                           :cost_pp=>100,
                                                                           :price_pp=>150,
@@ -43,8 +43,9 @@ describe Report do
     AIRCRAFT_CONV = [:to_s,:to_f]  
     report.set_files("./sample1.txt")
     report.extract_data
-    expect(report.convert_to_hash(:aircraft,2,AIRCRAFT_KEYS,AIRCRAFT_CONV)).to eq({:name=>"Gulfstream-G550",
-                                                                          :seats_number=>8.0})
+    expect(report.convert_to_hash(:aircraft,0,2,
+                      AIRCRAFT_KEYS,AIRCRAFT_CONV)).to eq({:name=>"Gulfstream-G550",
+                      :seats_number=>8.0})
   end 
 
 end
