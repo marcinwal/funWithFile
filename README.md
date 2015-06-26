@@ -1,0 +1,1 @@
+Just a small change of the previous project to solve simple issue of extracting data from a file, computing and saving results to a new file.
