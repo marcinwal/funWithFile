@@ -26,7 +26,9 @@ class Report
 
          
 
-  attr_reader :input_file,:output_file,:extract,:errors           
+  attr_reader :input_file,:output_file,:extract,:errors,
+              :general,:airline,:loyalty,
+              :aircrafts,:routes           
 
   include File_helper
 
@@ -73,11 +75,22 @@ class Report
   def convert_passangers_to_hash(symbol,start_from=2,keys,conv)
     result = []
     number_of_passangers = @extract[symbol].size
-    # byebug
     for i in 0...number_of_passangers
       result << convert_to_hash(symbol,i,start_from,keys,conv)
     end
     return result
+  end
+
+  def convert_all_data
+    @routes = convert_to_hash(:route,0,2,ROUTE_KEYS,ROUTE_CONV)
+    @aircrafts = convert_to_hash(:aircraft,0,2,AIRCRAFT_KEYS,AIRCRAFT_CONV)
+    @general = convert_passangers_to_hash(:general_passanger,2,
+                        GENERAL_AIRLINE_KEYS,GENERAL_AIRLINE_CONV)
+    @airline = convert_passangers_to_hash(:airline_passanger,2,
+                        GENERAL_AIRLINE_KEYS,GENERAL_AIRLINE_CONV)
+    @loyalty = convert_passangers_to_hash(:loyalty_passanger,2,
+                        LOYALTY_KEYS,LOYALTY_CONV)
+
   end
 
 

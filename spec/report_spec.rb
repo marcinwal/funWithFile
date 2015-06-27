@@ -57,4 +57,16 @@ describe Report do
           :extra_luggage=>false}])
   end
 
+  it 'should load and convert all the data' do 
+    report.set_files('./sample1.txt')
+    report.extract_data
+    report.convert_all_data
+    expect(report.routes).to eq({:origin=>"London",
+                                :destination=>"Dublin",
+                                :cost_pp=>100,
+                                :price_pp=>150,
+                                :min_pct=>75})
+    expect(report.airline).to eq([{:name=>"Trevor", :age=>54.0}])
+  end
+
 end
