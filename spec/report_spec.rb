@@ -47,5 +47,14 @@ describe Report do
                       AIRCRAFT_KEYS,AIRCRAFT_CONV)).to eq({:name=>"Gulfstream-G550",
                       :seats_number=>8.0})
   end 
+  it 'should extract loyalty_passanger' do 
+    LOYALTY_KEYS = [:name,:age,:points,:use_points,:extra_luggage]
+    LOYALTY_CONV = [:to_s,:to_f,:to_f,:downcase,:downcase] 
+    report.set_files("./sample1.txt")
+    report.extract_data
+    expect(report.convert_passangers_to_hash(:loyalty_passanger,2,LOYALTY_KEYS,LOYALTY_CONV)).to eq([{:name=>"Alan", :age=>65.0, 
+          :points=>50.0, :use_points=>false, 
+          :extra_luggage=>false}])
+  end
 
 end

@@ -63,11 +63,21 @@ class Report
     result = {}
     @extract[symbol][array_num].split(' ')[start_from..-1].each_with_index do |el,ix|
       converted_el = el.send(conv[ix])
-      result[keys[ix]] = (converted_el.class == TrueClass || 
-                          converted_el.class == FalseClass)? eval(converted_el) : converted_el
+      result[keys[ix]] = (converted_el == 'true' || 
+                          converted_el == 'false')? eval(converted_el) : converted_el
     #eval has to be performed on 'false'/'true'
     end
     result
+  end
+
+  def convert_passangers_to_hash(symbol,start_from=2,keys,conv)
+    result = []
+    number_of_passangers = @extract[symbol].size
+    # byebug
+    for i in 0...number_of_passangers
+      result << convert_to_hash(symbol,i,start_from,keys,conv)
+    end
+    return result
   end
 
 
