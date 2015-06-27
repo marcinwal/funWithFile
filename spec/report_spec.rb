@@ -69,4 +69,14 @@ describe Report do
     expect(report.airline).to eq([{:name=>"Trevor", :age=>54.0}])
   end
 
+  it 'should calculate number of pass' do 
+    report.set_files('./sample1.txt')
+    report.extract_data
+    report.convert_all_data
+    expect(report.total_number_passangers).to eq(5)
+    expect(report.general_number_passangers).to eq(3)
+    expect(report.airline_number_passangers).to eq(1)
+    expect(report.loyalty_number_passangers).to eq(1)
+  end
+
 end

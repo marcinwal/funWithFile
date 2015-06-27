@@ -93,6 +93,20 @@ class Report
 
   end
 
+  def total_number_passangers
+    @general.size + @airline.size + @loyalty.size
+  end
 
+  def general_number_passangers
+    @general.size
+  end
+
+  def airline_number_passangers
+    @airline.size
+  end
+
+  def loyalty_number_passangers
+    @loyalty.size
+  end
 
 end
