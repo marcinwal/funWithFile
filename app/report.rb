@@ -109,4 +109,9 @@ class Report
     @loyalty.size
   end
 
+  def number_bags
+    extra = @loyalty.reduce(0){|sum,el| el[:extra_luggage]? sum+1 :sum}
+    extra + total_number_passangers
+  end
+
 end

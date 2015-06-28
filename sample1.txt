@@ -5,3 +5,4 @@ add general Tom 15
 add general James 72
 add airline Trevor 54
 add loyalty Alan 65 50 FALSE FALSE
+add loyalty Max 42 50 TRUE TRUE

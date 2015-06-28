@@ -31,9 +31,9 @@ describe File_helper do
     expect(dictionary[:airline_passanger].length).to eq(1)
   end
 
-  it "should load 1 general loyalty" do 
+  it "should load 2 general loyalty" do 
     dictionary = tester.load_file(sample_data_file,pattern)
-    expect(dictionary[:loyalty_passanger].length).to eq(1)
+    expect(dictionary[:loyalty_passanger].length).to eq(2)
   end  
 
 end

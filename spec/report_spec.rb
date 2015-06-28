@@ -12,7 +12,7 @@ describe Report do
     expect(report.extract[:aircraft].length).to eq(1)
     expect(report.extract[:general_passanger].length).to eq(3)
     expect(report.extract[:airline_passanger].length).to eq(1)
-    expect(report.extract[:loyalty_passanger].length).to eq(1)
+    expect(report.extract[:loyalty_passanger].length).to eq(2)
   end
 
   it 'should set error' do 
@@ -54,7 +54,7 @@ describe Report do
     report.extract_data
     expect(report.convert_passangers_to_hash(:loyalty_passanger,2,LOYALTY_KEYS,LOYALTY_CONV)).to eq([{:name=>"Alan", :age=>65.0, 
           :points=>50.0, :use_points=>false, 
-          :extra_luggage=>false}])
+          :extra_luggage=>false},{:name=>"Max", :age=>42.0, :points=>50.0, :use_points=>true, :extra_luggage=>true}])
   end
 
   it 'should load and convert all the data' do 
@@ -73,10 +73,17 @@ describe Report do
     report.set_files('./sample1.txt')
     report.extract_data
     report.convert_all_data
-    expect(report.total_number_passangers).to eq(5)
+    expect(report.total_number_passangers).to eq(6)
     expect(report.general_number_passangers).to eq(3)
     expect(report.airline_number_passangers).to eq(1)
-    expect(report.loyalty_number_passangers).to eq(1)
+    expect(report.loyalty_number_passangers).to eq(2)
+  end
+
+  it 'should calculate bags ' do 
+    report.set_files('./sample1.txt')
+    report.extract_data
+    report.convert_all_data
+    expect(report.number_bags).to eq(7)
   end
 
 end
