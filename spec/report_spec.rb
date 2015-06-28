@@ -106,7 +106,7 @@ describe Report do
     report.set_files('./sample1.txt')
     report.extract_data
     report.convert_all_data
-    expect(report.can_fly?).to be true
+    expect(report.can_fly?).to eq('TRUE')
   end 
 
 end

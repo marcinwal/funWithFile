@@ -23,9 +23,6 @@ class Report
   LOYALTY_KEYS = [:name,:age,:points,:use_points,:extra_luggage]
   LOYALTY_CONV = [:to_s,:to_f,:to_f,:downcase,:downcase] 
 
-
-         
-
   attr_reader :input_file,:output_file,:extract,:errors,
               :general,:airline,:loyalty,
               :aircrafts,:routes           
@@ -90,7 +87,6 @@ class Report
                         GENERAL_AIRLINE_KEYS,GENERAL_AIRLINE_CONV)
     @loyalty = convert_passangers_to_hash(:loyalty_passanger,2,
                         LOYALTY_KEYS,LOYALTY_CONV)
-
   end
 
   def total_number_passangers
@@ -135,7 +131,9 @@ class Report
   end
 
   def can_fly?
-    total_number_passangers/@aircrafts[:seats_number] >= @routes[:min_pct]/100.0
+    (total_number_passangers/@aircrafts[:seats_number] >= 
+      @routes[:min_pct]/100.0).to_s.upcase
+    #to match task spec of TRUE value converted to string and upcase
   end
 
 end
