@@ -107,6 +107,10 @@ describe Report do
     report.extract_data
     report.convert_all_data
     expect(report.can_fly?).to eq('TRUE')
+    report.set_files('./sample4.txt')
+    report.extract_data
+    report.convert_all_data
+    expect(report.can_fly?).to eq('FALSE')
   end 
 
 end

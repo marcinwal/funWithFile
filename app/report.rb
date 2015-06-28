@@ -2,7 +2,7 @@ require 'byebug'
 class Report
 
   PATTERNS = {:route => /add route \D+ \D+ \d+ \d+ \d+/,
-             :aircraft => /add aircraft \S+ \d/,
+             :aircraft => /add aircraft \S+ \d+/,
              :general_passanger => /add general \D+ \d{1,3}/,
              :airline_passanger => /add airline \D+ \d{1,3}/,
              :loyalty_passanger => /add loyalty \D+ \d{1,3} \d+ (TRUE|FALSE) (TRUE|FALSE)/}
@@ -71,6 +71,7 @@ class Report
 
   def convert_passangers_to_hash(symbol,start_from=2,keys,conv)
     result = []
+    return result unless @extract[symbol]
     number_of_passangers = @extract[symbol].size
     for i in 0...number_of_passangers
       result << convert_to_hash(symbol,i,start_from,keys,conv)
