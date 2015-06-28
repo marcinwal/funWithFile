@@ -1,4 +1,3 @@
-require 'byebug'
 class Report
 
   PATTERNS = {:route => /add route \D+ \D+ \d+ \d+ \d+/,
@@ -135,6 +134,14 @@ class Report
     (total_number_passangers/@aircrafts[:seats_number] >= 
       @routes[:min_pct]/100.0).to_s.upcase
     #to match task spec of TRUE value converted to string and upcase
+  end
+
+  def final
+    [total_number_passangers,general_number_passangers,
+    airline_number_passangers,loyalty_number_passangers,
+    number_bags,redeemed,total_cost_flight,
+    total_unadj_revenue,total_adj_revenue,
+    can_fly?]
   end
 
 end

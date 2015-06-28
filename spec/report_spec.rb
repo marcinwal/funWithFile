@@ -113,4 +113,12 @@ describe Report do
     expect(report.can_fly?).to eq('FALSE')
   end 
 
+  it 'should get the answer' do 
+    report.set_files('./sample1.txt')
+    report.extract_data
+    report.convert_all_data
+    expect(report.final).to eq([6, 3, 1, 2, 7, 50.0,
+                                600.0, 900.0, 700.0, "TRUE"])
+  end
+
 end
