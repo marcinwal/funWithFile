@@ -86,4 +86,20 @@ describe Report do
     expect(report.number_bags).to eq(7)
   end
 
+  it 'should calculate total cost and revenue' do 
+    report.set_files('./sample1.txt')
+    report.extract_data
+    report.convert_all_data
+    expect(report.total_cost_flight).to eq(600.0)
+    expect(report.total_unadj_revenue).to eq(900.0)
+    expect(report.total_adj_revenue).to eq(700.0)
+  end
+
+  it 'should calculate redeemed' do 
+    report.set_files('./sample1.txt')
+    report.extract_data
+    report.convert_all_data
+    expect(report.redeemed).to eq(50)
+  end
+
 end

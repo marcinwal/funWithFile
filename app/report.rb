@@ -114,4 +114,23 @@ class Report
     extra + total_number_passangers
   end
 
+  def total_cost_flight
+    total_number_passangers * @routes[:cost_pp]
+  end
+
+  def total_unadj_revenue
+    total_number_passangers * @routes[:price_pp]
+  end
+
+  def total_adj_revenue
+    loyalty_rev = @loyalty.reduce(0){|sum,el| el[:use_points]? 
+      sum+[0,@routes[:price_pp]-el[:points]].max : sum+@routes[:price_pp]}
+    loyalty_rev + @routes[:price_pp] * general_number_passangers
+  end
+
+  def redeemed
+    total_unadj_revenue - total_adj_revenue -
+    airline_number_passangers * @routes[:price_pp]
+  end
+
 end
