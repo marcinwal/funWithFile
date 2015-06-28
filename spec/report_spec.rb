@@ -102,4 +102,11 @@ describe Report do
     expect(report.redeemed).to eq(50)
   end
 
+  it 'should check if flight is allowed' do 
+    report.set_files('./sample1.txt')
+    report.extract_data
+    report.convert_all_data
+    expect(report.can_fly?).to be true
+  end 
+
 end

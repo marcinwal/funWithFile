@@ -125,12 +125,17 @@ class Report
   def total_adj_revenue
     loyalty_rev = @loyalty.reduce(0){|sum,el| el[:use_points]? 
       sum+[0,@routes[:price_pp]-el[:points]].max : sum+@routes[:price_pp]}
+    #price cannot be negative and .max added   
     loyalty_rev + @routes[:price_pp] * general_number_passangers
   end
 
   def redeemed
     total_unadj_revenue - total_adj_revenue -
     airline_number_passangers * @routes[:price_pp]
+  end
+
+  def can_fly?
+    total_number_passangers/@aircrafts[:seats_number] >= @routes[:min_pct]/100.0
   end
 
 end
