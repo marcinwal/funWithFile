@@ -44,6 +44,7 @@ class Report
     @output_file = gets.chomp
   end
 
+  #set up for testing to load files for tests
   def set_files(input = "./sample1.txt",output = './dest1.txt')
     @input_file = input
     @output_file = output
@@ -79,6 +80,10 @@ class Report
   end
 
   def convert_all_data
+    if @errors.size > 0 
+      puts @errors
+      exit 0
+    end
     @routes = convert_to_hash(:route,0,2,ROUTE_KEYS,ROUTE_CONV)
     @aircrafts = convert_to_hash(:aircraft,0,2,AIRCRAFT_KEYS,AIRCRAFT_CONV)
     @general = convert_passangers_to_hash(:general_passanger,2,
@@ -121,7 +126,7 @@ class Report
   def total_adj_revenue
     loyalty_rev = @loyalty.reduce(0){|sum,el| el[:use_points]? 
       sum+[0,@routes[:price_pp]-el[:points]].max : sum+@routes[:price_pp]}
-    #price cannot be negative and .max added   
+    #price cannot be negative and that is why .max is added   
     loyalty_rev + @routes[:price_pp] * general_number_passangers
   end
 

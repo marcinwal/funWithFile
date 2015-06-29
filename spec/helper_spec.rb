@@ -3,6 +3,7 @@ require_relative '../app/file_helper.rb'
 describe File_helper do
 
   let(:sample_data_file){'./sample1.txt'}
+  let(:output_data_file){'./out.txt'}
   let(:tester){(Class.new{include File_helper}).new}
   let(:pattern){{:route => /add route \D+ \D+ \d+ \d+ \d+/,
                  :aircraft => /add aircraft \S+ \d/,
@@ -35,5 +36,10 @@ describe File_helper do
     dictionary = tester.load_file(sample_data_file,pattern)
     expect(dictionary[:loyalty_passanger].length).to eq(2)
   end  
+
+  it 'should write to a file' do 
+    tester.save_file(output_data_file,[6, 3, 1, 2, 7, 50.0,
+                                600.0, 900.0, 700.0, "TRUE"])
+  end
 
 end
