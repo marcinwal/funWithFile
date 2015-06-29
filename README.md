@@ -2,9 +2,9 @@ Just a small change of the previous project to solve simple issue of extracting 
 
 To run program:
 clone it to your folder 
-in the main folder : "ruby ./app/solution.rb"
+in the main folder and type: "ruby ./app/solution.rb"
 
-Provide two file paths.
+Provide two files paths.
 
 Find your output file.
 
