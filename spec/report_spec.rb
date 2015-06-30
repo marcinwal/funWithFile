@@ -22,15 +22,35 @@ describe Report do
   end 
 
   it 'should extract the route' do
-    ROUTE_KEYS = [:origin,:destination,
+    ROUTE_KEYS = [:operator,:type,:origin,:destination,
                 :cost_pp,:price_pp,
                 :min_pct]
-    ROUTE_CONV = [:to_s,:to_s,
+    ROUTE_CONV = [:to_s,:to_s,:to_s,:to_s,
                 :to_f,:to_f,
                 :to_f]  
     report.set_files("./sample1.txt")
     report.extract_data
-    expect(report.convert_to_hash(:route,0,2,ROUTE_KEYS,ROUTE_CONV)).to eq({:origin=>"London",
+    expect(report.convert_to_hash(:route,0,ROUTE_KEYS,ROUTE_CONV)).to eq({:operator=>"add",
+                                                                          :type=>"route",
+                                                                          :origin=>"London",
+                                                                          :destination=>"Dublin",
+                                                                          :cost_pp=>100,
+                                                                          :price_pp=>150,
+                                                                          :min_pct=>75})
+  end
+
+  it 'should extract the route' do
+    ROUTE_KEYS = [:operator,:type,:origin,:destination,
+                :cost_pp,:price_pp,
+                :min_pct]
+    ROUTE_CONV = [:to_s,:to_s,:to_s,:to_s,
+                :to_f,:to_f,
+                :to_f]  
+    report.set_files("./sample1.txt")
+    report.extract_data
+    expect(report.convert_to_hash(:route,0,ROUTE_KEYS,ROUTE_CONV)).to eq({:operator=>"add",
+                                                                          :type=>"route",
+                                                                          :origin=>"London",
                                                                           :destination=>"Dublin",
                                                                           :cost_pp=>100,
                                                                           :price_pp=>150,
@@ -39,34 +59,40 @@ describe Report do
 
   it 'should extract the aircraft' do 
 
-    AIRCRAFT_KEYS = [:name,:seats_number]
-    AIRCRAFT_CONV = [:to_s,:to_f]  
+    AIRCRAFT_KEYS = [:operator,:type,:name,:seats_number]
+    AIRCRAFT_CONV = [:to_s,:to_s,:to_s,:to_f]  
     report.set_files("./sample1.txt")
     report.extract_data
-    expect(report.convert_to_hash(:aircraft,0,2,
-                      AIRCRAFT_KEYS,AIRCRAFT_CONV)).to eq({:name=>"Gulfstream-G550",
+    expect(report.convert_to_hash(:aircraft,0,
+                      AIRCRAFT_KEYS,AIRCRAFT_CONV)).to eq({:operator=>"add",
+                      :type=>"aircraft",
+                      :name=>"Gulfstream-G550",
                       :seats_number=>8.0})
   end 
   it 'should extract loyalty_passanger' do 
-    LOYALTY_KEYS = [:name,:age,:points,:use_points,:extra_luggage]
-    LOYALTY_CONV = [:to_s,:to_f,:to_f,:downcase,:downcase] 
+    LOYALTY_KEYS = [:operator,:type,:name,:age,:points,:use_points,:extra_luggage]
+    LOYALTY_CONV = [:to_s,:to_s,:to_s,:to_f,:to_f,:downcase,:downcase] 
     report.set_files("./sample1.txt")
     report.extract_data
-    expect(report.convert_passangers_to_hash(:loyalty_passanger,2,LOYALTY_KEYS,LOYALTY_CONV)).to eq([{:name=>"Alan", :age=>65.0, 
+    expect(report.convert_passangers_to_hash(:loyalty_passanger,LOYALTY_KEYS,LOYALTY_CONV)).to eq([{
+          :operator=>"add",
+          :type=>"loyalty",
+          :name=>"Alan", :age=>65.0, 
           :points=>50.0, :use_points=>false, 
-          :extra_luggage=>false},{:name=>"Max", :age=>42.0, :points=>50.0, :use_points=>true, :extra_luggage=>true}])
+          :extra_luggage=>false},{:operator=>"add",:type=>"loyalty",:name=>"Max", :age=>42.0, :points=>50.0, :use_points=>true, :extra_luggage=>true}])
   end
 
   it 'should load and convert all the data' do 
     report.set_files('./sample1.txt')
     report.extract_data
     report.convert_all_data
-    expect(report.routes).to eq({:origin=>"London",
+    expect(report.routes).to eq({:operator=>"add",:type=>"route",
+                                :origin=>"London",
                                 :destination=>"Dublin",
                                 :cost_pp=>100,
                                 :price_pp=>150,
                                 :min_pct=>75})
-    expect(report.airline).to eq([{:name=>"Trevor", :age=>54.0}])
+    expect(report.airline).to eq([{:operator=>"add",:type=>"airline",:name=>"Trevor", :age=>54.0}])
   end
 
   it 'should calculate number of pass' do 

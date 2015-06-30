@@ -5,22 +5,39 @@ class Report
              :general_passanger => /add general \D+ \d{1,3}/,
              :airline_passanger => /add airline \D+ \d{1,3}/,
              :loyalty_passanger => /add loyalty \D+ \d{1,3} \d+ (TRUE|FALSE) (TRUE|FALSE)/}
-
-  ROUTE_KEYS = [:origin,:destination,
+  
+  ROUTE_KEYS = [:operator,:type,:origin,:destination,
                 :cost_pp,:price_pp,
                 :min_pct]
-  ROUTE_CONV = [:to_s,:to_s,
+
+  ROUTE_CONV = [:to_s,:to_s,:to_s,:to_s,
                 :to_f,:to_f,
                 :to_f]  
 
-  AIRCRAFT_KEYS = [:name,:seats_number]
-  AIRCRAFT_CONV = [:to_s,:to_f]  
+  # ROUTE_KEYS = [:origin,:destination,
+  #               :cost_pp,:price_pp,
+  #               :min_pct]
+  # ROUTE_CONV = [:to_s,:to_s,
+  #               :to_f,:to_f,
+  #               :to_f]  
 
-  GENERAL_AIRLINE_KEYS = [:name,:age]
-  GENERAL_AIRLINE_CONV = [:to_s,:to_f] 
+  # AIRCRAFT_KEYS = [:name,:seats_number]
+  # AIRCRAFT_CONV = [:to_s,:to_f]  
 
-  LOYALTY_KEYS = [:name,:age,:points,:use_points,:extra_luggage]
-  LOYALTY_CONV = [:to_s,:to_f,:to_f,:downcase,:downcase] 
+  AIRCRAFT_KEYS = [:operator,:type,:name,:seats_number]
+  AIRCRAFT_CONV = [:to_s,:to_s,:to_s,:to_f]  
+
+  # GENERAL_AIRLINE_KEYS = [:name,:age]
+  # GENERAL_AIRLINE_CONV = [:to_s,:to_f] 
+
+  GENERAL_AIRLINE_KEYS = [:operator,:type,:name,:age]
+  GENERAL_AIRLINE_CONV = [:to_s,:to_s,:to_s,:to_f] 
+
+  # LOYALTY_KEYS = [:name,:age,:points,:use_points,:extra_luggage]
+  # LOYALTY_CONV = [:to_s,:to_f,:to_f,:downcase,:downcase] 
+
+  LOYALTY_KEYS = [:operator,:type,:name,:age,:points,:use_points,:extra_luggage]
+  LOYALTY_CONV = [:to_s,:to_s,:to_s,:to_f,:to_f,:downcase,:downcase] 
 
   attr_reader :input_file,:output_file,:extract,:errors,
               :general,:airline,:loyalty,
@@ -58,9 +75,9 @@ class Report
   end
 
   #reads given data and converts it into hash/dictionary
-  def convert_to_hash(symbol,array_num,start_from=2,keys,conv)
+  def convert_to_hash(symbol,array_num,keys,conv)
     result = {}
-    @extract[symbol][array_num].split(' ')[start_from..-1].each_with_index do |el,ix|
+    @extract[symbol][array_num].split(' ').each_with_index do |el,ix|
       converted_el = el.send(conv[ix])
       result[keys[ix]] = (converted_el == 'true' || 
                           converted_el == 'false')? eval(converted_el) : converted_el
@@ -69,12 +86,12 @@ class Report
     result
   end
 
-  def convert_passangers_to_hash(symbol,start_from=2,keys,conv)
+  def convert_passangers_to_hash(symbol,keys,conv)
     result = []
     return result unless @extract[symbol]
     number_of_passangers = @extract[symbol].size
     for i in 0...number_of_passangers
-      result << convert_to_hash(symbol,i,start_from,keys,conv)
+      result << convert_to_hash(symbol,i,keys,conv)
     end
     return result
   end
@@ -84,13 +101,13 @@ class Report
       puts @errors
       exit 0
     end
-    @routes = convert_to_hash(:route,0,2,ROUTE_KEYS,ROUTE_CONV)
-    @aircrafts = convert_to_hash(:aircraft,0,2,AIRCRAFT_KEYS,AIRCRAFT_CONV)
-    @general = convert_passangers_to_hash(:general_passanger,2,
+    @routes = convert_to_hash(:route,0,ROUTE_KEYS,ROUTE_CONV)
+    @aircrafts = convert_to_hash(:aircraft,0,AIRCRAFT_KEYS,AIRCRAFT_CONV)
+    @general = convert_passangers_to_hash(:general_passanger,
                         GENERAL_AIRLINE_KEYS,GENERAL_AIRLINE_CONV)
-    @airline = convert_passangers_to_hash(:airline_passanger,2,
+    @airline = convert_passangers_to_hash(:airline_passanger,
                         GENERAL_AIRLINE_KEYS,GENERAL_AIRLINE_CONV)
-    @loyalty = convert_passangers_to_hash(:loyalty_passanger,2,
+    @loyalty = convert_passangers_to_hash(:loyalty_passanger,
                         LOYALTY_KEYS,LOYALTY_CONV)
   end
 
