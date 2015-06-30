@@ -12,29 +12,13 @@ class Report
 
   ROUTE_CONV = [:to_s,:to_s,:to_s,:to_s,
                 :to_f,:to_f,
-                :to_f]  
-
-  # ROUTE_KEYS = [:origin,:destination,
-  #               :cost_pp,:price_pp,
-  #               :min_pct]
-  # ROUTE_CONV = [:to_s,:to_s,
-  #               :to_f,:to_f,
-  #               :to_f]  
-
-  # AIRCRAFT_KEYS = [:name,:seats_number]
-  # AIRCRAFT_CONV = [:to_s,:to_f]  
+                :to_f]    
 
   AIRCRAFT_KEYS = [:operator,:type,:name,:seats_number]
-  AIRCRAFT_CONV = [:to_s,:to_s,:to_s,:to_f]  
-
-  # GENERAL_AIRLINE_KEYS = [:name,:age]
-  # GENERAL_AIRLINE_CONV = [:to_s,:to_f] 
+  AIRCRAFT_CONV = [:to_s,:to_s,:to_s,:to_f]   
 
   GENERAL_AIRLINE_KEYS = [:operator,:type,:name,:age]
   GENERAL_AIRLINE_CONV = [:to_s,:to_s,:to_s,:to_f] 
-
-  # LOYALTY_KEYS = [:name,:age,:points,:use_points,:extra_luggage]
-  # LOYALTY_CONV = [:to_s,:to_f,:to_f,:downcase,:downcase] 
 
   LOYALTY_KEYS = [:operator,:type,:name,:age,:points,:use_points,:extra_luggage]
   LOYALTY_CONV = [:to_s,:to_s,:to_s,:to_f,:to_f,:downcase,:downcase] 
