@@ -4,6 +4,7 @@ class Report
              :aircraft => /add aircraft \S+ \d+/,
              :general_passanger => /add general \D+ \d{1,3}/,
              :airline_passanger => /add airline \D+ \d{1,3}/,
+             :discount_passanger => /add discount \D+ \d{1,3}/,
              :loyalty_passanger => /add loyalty \D+ \d{1,3} \d+ (TRUE|FALSE) (TRUE|FALSE)/}
   
   ROUTE_KEYS = [:operator,:type,:origin,:destination,
@@ -22,6 +23,9 @@ class Report
 
   LOYALTY_KEYS = [:operator,:type,:name,:age,:points,:use_points,:extra_luggage]
   LOYALTY_CONV = [:to_s,:to_s,:to_s,:to_f,:to_f,:downcase,:downcase] 
+
+  DISCOUNT_KEYS = [:operator,:type,:name,:age]
+  DISCOUNT_CONV = [:to_s,:to_s,:to_s,:to_f]
 
   attr_reader :input_file,:output_file,:extract,:errors,
               :general,:airline,:loyalty,
@@ -93,10 +97,12 @@ class Report
                         GENERAL_AIRLINE_KEYS,GENERAL_AIRLINE_CONV)
     @loyalty = convert_passangers_to_hash(:loyalty_passanger,
                         LOYALTY_KEYS,LOYALTY_CONV)
+    @discount = convert_passangers_to_hash(:discount_passanger,
+                        DISCOUNT_KEYS,DISCOUNT_CONV)
   end
 
   def total_number_passangers
-    @general.size + @airline.size + @loyalty.size
+    @general.size + @airline.size + @loyalty.size + @discount.size
   end
 
   def general_number_passangers
@@ -111,9 +117,13 @@ class Report
     @loyalty.size
   end
 
+  def discount_number_passangers
+    @discount.size
+  end
+
   def number_bags
-    extra = @loyalty.reduce(0){|sum,el| el[:extra_luggage]? sum+1 :sum}
-    extra + total_number_passangers
+    extra = @loyalty.reduce(0){|sum,el| el[:extra_luggage]? sum+1 : sum}
+    extra + total_number_passangers - discount_number_passangers
   end
 
   def total_cost_flight
@@ -124,11 +134,15 @@ class Report
     total_number_passangers * @routes[:price_pp]
   end
 
+  def discount_rev
+    discount_number_passangers * @routes[:price_pp] * 0.5
+  end
+
   def total_adj_revenue
     loyalty_rev = @loyalty.reduce(0){|sum,el| el[:use_points]? 
       sum+[0,@routes[:price_pp]-el[:points]].max : sum+@routes[:price_pp]}
     #price cannot be negative and that is why .max is added   
-    loyalty_rev + @routes[:price_pp] * general_number_passangers
+    loyalty_rev + @routes[:price_pp] * general_number_passangers + discount_rev
   end
 
   def redeemed

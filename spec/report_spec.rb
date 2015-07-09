@@ -82,6 +82,19 @@ describe Report do
           :extra_luggage=>false},{:operator=>"add",:type=>"loyalty",:name=>"Max", :age=>42.0, :points=>50.0, :use_points=>true, :extra_luggage=>true}])
   end
 
+  it 'should extract discount passanger' do 
+    DISCOUNT_KEYS = [:operator,:type,:name,:age]
+    DISCOUNT_CONV = [:to_s,:to_s,:to_s,:to_f]
+    report.set_files("./sample1.txt")
+    report.extract_data
+    expect(report.convert_passangers_to_hash(:discount_passanger,DISCOUNT_KEYS,DISCOUNT_CONV)).to eq([{
+        :operator=>"add",
+        :type=>"discount",
+        :name=>"Max",
+        :age=>37.0
+      }])
+  end 
+
   it 'should load and convert all the data' do 
     report.set_files('./sample1.txt')
     report.extract_data
@@ -99,10 +112,11 @@ describe Report do
     report.set_files('./sample1.txt')
     report.extract_data
     report.convert_all_data
-    expect(report.total_number_passangers).to eq(6)
+    expect(report.total_number_passangers).to eq(7)
     expect(report.general_number_passangers).to eq(3)
     expect(report.airline_number_passangers).to eq(1)
     expect(report.loyalty_number_passangers).to eq(2)
+    expect(report.discount_number_passangers).to eq(1)
   end
 
   it 'should calculate bags ' do 
@@ -116,9 +130,9 @@ describe Report do
     report.set_files('./sample1.txt')
     report.extract_data
     report.convert_all_data
-    expect(report.total_cost_flight).to eq(600.0)
-    expect(report.total_unadj_revenue).to eq(900.0)
-    expect(report.total_adj_revenue).to eq(700.0)
+    expect(report.total_cost_flight).to eq(700.0)
+    expect(report.total_unadj_revenue).to eq(1050.0)
+    expect(report.total_adj_revenue).to eq(775.0)
   end
 
   it 'should calculate redeemed' do 
